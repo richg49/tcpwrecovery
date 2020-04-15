@@ -13,20 +13,20 @@ import optparse
 
 def process_file(filename):
 	try:
-		print "-> Trying: " + filename
+		print("-> Trying: " + filename)
 		f = open(filename,"r")
-		print "-> Found: " + filename
-		print "-> Decrypting: " + filename
-		print ""
+		print( "-> Found: " + filename)
+		print("-> Decrypting: " + filename)
+		print ("")
 		for line in f:
 			if ("password" in line.strip()):
-				print "password=" + tc_decrypt(line.strip().split("=")[1])
-			else: print line.strip()
+				print ("password=" + tc_decrypt(line.strip().split("=")[1]))
+			else: print( line.strip())
 		f.close()
-		print ""
+		print ("")
 	except IOError:
-		print "-> Not found: " + filename
-		print ""
+		print("-> Not found: " + filename)
+		print ("")
 
 def search_ini():
 	"""
@@ -50,7 +50,7 @@ def tc_shift(n1, n2):
 def tc_decrypt(pwd):
 	global RANDOM_BASE
 	password=[]
-	for i in range(len(pwd)/2 - 4): #skip last 8 characters (4 * 2 bytes)
+	for i in range(len(pwd)//2 - 4): #skip last 8 characters (4 * 2 bytes)
 		password.append(int(pwd[2*i:2*(i+1)],16))
 	pwlen = len(password)
 	
@@ -79,6 +79,8 @@ def tc_decrypt(pwd):
 	return "".join(password)
 
 def main():
+	global RANDOM_BASE
+	RANDOM_BASE = 0
 	usage = "Usage: %prog [options]"
 	parser = optparse.OptionParser(usage=usage)
 	
@@ -92,9 +94,9 @@ def main():
 		process_file(options.file)
 	if (options.password != ""):
 		pw = tc_decrypt(options.password)
-		print "Decrypted password: " + pw
+		print ("Decrypted password: " + pw)
 	if (options.file == "" and options.password == "" and not options.common):
-		print "Nothing specified, run \"tcpwrecovery -h\" for options"
+		print ("Nothing specified, run \"tcpwrecovery -h\" for options")
 	
 if __name__ == '__main__':
 	main()
